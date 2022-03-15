@@ -1,0 +1,116 @@
+2022-03-14 16:25:19,147 INFO: errors [in starter_code/app.py:527]
+2022-03-14 16:25:31,422 ERROR: Exception on /venues [GET] [in /Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "starter_code/app.py", line 124, in venues
+    "num_upcoming_shows": db.session.query(func.count(Show.c.Venue_id)).filter(Show.c.Venue_id == venue.id).filter(Show.c.start_time > datetime.datetime.now()).all()[0][0]
+AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
+2022-03-14 16:25:49,861 ERROR: Exception on /venues [GET] [in /Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "starter_code/app.py", line 124, in venues
+    "num_upcoming_shows": db.session.query(func.count(Show.c.Venue_id)).filter(Show.c.Venue_id == venue.id).filter(Show.c.start_time > datetime.datetime.now()).all()[0][0]
+AttributeError: type object 'datetime.datetime' has no attribute 'datetime'
+2022-03-14 19:36:29,881 INFO: errors [in starter_code/app.py:487]
+2022-03-14 21:00:49,352 INFO: errors [in starter_code/app.py:528]
+2022-03-14 21:01:56,874 ERROR: Exception on /venues/create [POST] [in /Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "starter_code/app.py", line 214, in create_venue_submission
+    website = request.form['website']
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/werkzeug/datastructures.py", line 442, in __getitem__
+    raise exceptions.BadRequestKeyError(key)
+werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "starter_code/app.py", line 226, in create_venue_submission
+    print(sys.exc_info())
+NameError: name 'sys' is not defined
+2022-03-14 21:03:00,044 ERROR: Exception on /venues/create [POST] [in /Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "starter_code/app.py", line 214, in create_venue_submission
+    facebook_link = request.form['facebook_link']
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/werkzeug/datastructures.py", line 442, in __getitem__
+    raise exceptions.BadRequestKeyError(key)
+werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "starter_code/app.py", line 226, in create_venue_submission
+    db.session.rollback()
+NameError: name 'sys' is not defined
+2022-03-14 21:04:47,895 ERROR: Exception on /venues/create [POST] [in /Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py:1891]
+Traceback (most recent call last):
+  File "starter_code/app.py", line 214, in create_venue_submission
+    facebook_link = request.form['facebook_link']
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/werkzeug/datastructures.py", line 442, in __getitem__
+    raise exceptions.BadRequestKeyError(key)
+werkzeug.exceptions.BadRequestKeyError: 400 Bad Request: The browser (or proxy) sent a request that this server could not understand.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 2446, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1951, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1820, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1949, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/zack/opt/anaconda3/lib/python3.7/site-packages/flask/app.py", line 1935, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "starter_code/app.py", line 226, in create_venue_submission
+    db.session.rollback()
+NameError: name 'sys' is not defined
+2022-03-14 21:08:20,360 INFO: errors [in starter_code/app.py:529]
