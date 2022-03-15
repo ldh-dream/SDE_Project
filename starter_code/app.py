@@ -17,14 +17,12 @@ from config import SQLALCHEMY_DATABASE_URI
 from flask_migrate import Migrate
 import datetime
 import sys
+from models import Venue, Show , Artist, db, app
+
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
-
-app = Flask(__name__)
-moment = Moment(app)
-app.config.from_object('config')
-db = SQLAlchemy(app)
+# imported from models
 
 # TODO: connect to a local postgresql database
 migrate = Migrate(app, db)
@@ -33,52 +31,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #----------------------------------------------------------------------------#
 # Models.
 #----------------------------------------------------------------------------#
-Show = db.Table('Show', db.Model.metadata,
-    db.Column('Venue_id', db.Integer, db.ForeignKey('Venue.id')),
-    db.Column('Artist_id', db.Integer, db.ForeignKey('Artist.id')),
-    db.Column('start_time', db.DateTime)
-                )
-
-class Venue(db.Model):
-    __tablename__ = 'Venue'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(120))
-    address = db.Column(db.String(120))
-    phone = db.Column(db.String(120))
-    image_link = db.Column(db.String(500))
-    facebook_link = db.Column(db.String(120))
-
-    genres = db.Column(db.ARRAY(db.String()))
-    seeking_talent = db.Column(db.Boolean, nullable=False, default=False)
-    seeking_description = db.Column(db.String(500))
-    website_link = db.Column(db.String(120))
-    artist = db.relationship('Artist', secondary=Show, backref=db.backref('venues'), lazy='joined')
-
-    def __repr__(self):
-      return 'Venue Id:{} | Name: {}'.format(self.id, self.name)
-
-class Artist(db.Model):
-    __tablename__ = 'Artist'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(120))
-    phone = db.Column(db.String(120))
-
-    image_link = db.Column(db.String(500))
-    facebook_link = db.Column(db.String(120))
-    genres = db.Column(db.ARRAY(db.String()))
-    website_link = db.Column(db.String(120))
-    seeking_venue = db.Column(db.Boolean, nullable=False, default=False)
-    seeking_description = db.Column(db.String(500))
-
-    def __repr__(self):
-      return 'Artist Id:{} | Name: {}'.format(self.id, self.name)
-
+# see models.py
 
 #----------------------------------------------------------------------------#
 # Filters.
@@ -201,8 +154,12 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
+  form  = VenueForm(request.form)
+  if not form.validate():
+    flash(form.errors)
+    flash('An error occurred due to form validation. Venue {} could not be listed.'.format(request.form['name']))
+    return render_template('pages/home.html')
   error = False
-
   try:
     name = request.form['name']
     city = request.form['city']
@@ -443,6 +400,11 @@ def create_artist_form():
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
+
+  form = ArtistForm(request.form)
+  if not form.validate():
+    flash('An error occurred due to form validation, Artist ' + request.form['name'] + ' could not be listed.')
+    return render_template('pages/home.html')
   error = False
   try:
     name = request.form['name']
@@ -509,6 +471,10 @@ def create_shows():
 
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
+  form = ShowForm(request.form)
+  if not form.validate():
+    return render_template('pages/home.html')
+    flash('An error occurred due to form validation. Show could not be listed.')
   error = False
   try:
     newShow = Show.insert().values(
