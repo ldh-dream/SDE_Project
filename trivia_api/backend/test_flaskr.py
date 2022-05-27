@@ -75,8 +75,8 @@ class TriviaTestCase(unittest.TestCase):
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(data['total_question'])
-        self.assertTrue(len(data['question']))
+        self.assertTrue(data['total_questions'])
+        self.assertTrue(len(data['questions']))
 
     def test_error_405_paginated_questions(self):
         """
@@ -94,7 +94,7 @@ class TriviaTestCase(unittest.TestCase):
 
         # Used as header to POST /question
         json_search_question = {
-            'search': 'no such stuff in search',
+            'searchTerm': 'no such stuff in search',
         }
 
         res = self.client().post('/questions', json=json_search_question)
@@ -141,7 +141,7 @@ class TriviaTestCase(unittest.TestCase):
 ################play quiz#######################
     def test_error_400_play_quiz(self):
         """Test /quiz error without any request"""
-        res = self.client().post('/quiz')
+        res = self.client().post('/quizzes')
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 400)
@@ -167,7 +167,7 @@ class TriviaTestCase(unittest.TestCase):
                 'id': '1'
             }
         }
-        res = self.client().post('/quiz', json=json_play_quizz)
+        res = self.client().post('/quizzes', json=json_play_quizz)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)

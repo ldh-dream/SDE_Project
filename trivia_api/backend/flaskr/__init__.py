@@ -159,7 +159,7 @@ def create_app(test_config=None):
         new_category = body.get("category", None)
         new_difficulty = body.get("difficulty", None)
 
-        search = body.get("search", None)
+        search = body.get("searchTerm", None)
         if search:
             selection = Question.query.order_by(Question.id).filter(
                 Question.question.ilike("%{}%".format(search))
@@ -232,7 +232,7 @@ def create_app(test_config=None):
   and shown whether they were correct or not. 
   '''
 
-    @app.route('/quiz', methods=['POST'])
+    @app.route('/quizzes', methods=['POST'])
     def play_quiz():
       body = request.get_json()
       if not body:
