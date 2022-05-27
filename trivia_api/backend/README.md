@@ -208,7 +208,7 @@ curl -X DELETE http://127.0.0.1:5000/questions/10
 ```
 ###4. POST quiz
 ```bash
-curl -X POST http://127.0.0.1:5000/quiz -d '{"previous_questions" : [1], "quiz_category" : {"type" : "Science", "id" : "1"}} ' -H 'Content-Type: application/json'
+curl -X POST http://127.0.0.1:5000/quizzs -d '{"previous_questions" : [1], "quiz_category" : {"type" : "Science", "id" : "1"}} ' -H 'Content-Type: application/json'
 ```
 - provide a list of already asked questions and a category to ask for a fitting, random question.
 - Request: previous_questions, quiz_category
