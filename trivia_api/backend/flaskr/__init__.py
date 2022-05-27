@@ -48,6 +48,7 @@ def create_app(test_config=None):
         except TypeError:
             # otherwise, return given default text
             return default_text
+
     '''
   @TODO: 
   Create an endpoint to handle GET requests 
@@ -154,46 +155,51 @@ def create_app(test_config=None):
         body = request.get_json()
         if not body:
             abort(400, {'message': 'request not found'})
-        new_question = body.get("question", None)
-        new_answer = body.get("answer", None)
-        new_category = body.get("category", None)
-        new_difficulty = body.get("difficulty", None)
+        searchTerm = body.get("searchTerm", None)
+        if searchTerm:
+            questions = Question.query.filter(Question.question.contains(searchTerm)).all()
 
-        search = body.get("searchTerm", None)
-        if search:
-            selection = Question.query.order_by(Question.id).filter(
-                Question.question.ilike("%{}%".format(search))
-            ).all()
+            if not questions:
+                abort(404, {"message": 'no questions which contains {} found.'.format(searchTerm)})
 
-            if not selection:
-                abort(404, {"message":'no questions which contains {} found.'.format(search)})
+            questions_found = [question.format() for question in questions]
+            selections = Question.query.order_by(Question.id).all()
+            categories = Category.query.all()
+            # categories_all = [category.format() for category in categories]
 
-            current_questions = paginate_questions(request, selection)
+            return jsonify({
+                'success': True,
+                'questions': questions_found,
+                'total_questions': len(selections),
+                'current_category': ''
+            })
 
-            return jsonify(
-                {
-                    "success": True,
-                    "questions": current_questions,
-                    "total_questions": len(selection)
-                }
-            )
+        new_question = body.get('question', None)
+        new_answer = body.get('answer', None)
+        new_category = str(int(body.get('category', None)) + 1)
+        new_difficulty = body.get('difficulty', None)
 
         try:
-            question = Question(question=new_question, answer=new_answer, category=new_category,
-                                difficulty=new_difficulty)
+            # Try to insert a new question. If anything went wrong, raise 422 "unprocessable"
+            question = Question(
+                question=new_question,
+                answer=new_answer,
+                category=new_category,
+                difficulty=new_difficulty
+            )
             question.insert()
 
-            selection = Question.query.order_by(Question.id).all()
-            current_questions = paginate_questions(request, selection)
+            # After succesfully insertion, get all paginated questions
+            selections = Question.query.order_by(Question.id).all()
+            questions_paginated = paginate_questions(request, selections)
 
-            return jsonify(
-                {
-                    "success": True,
-                    "created": question.id,
-                    "questions": current_questions,
-                    "total_questions": len(Question.query.all())
-                }
-            )
+            # Return succesfull response
+            return jsonify({
+                'success': True,
+                'created': question.id,
+                'questions': questions_paginated,
+                'total_questions': len(selections)
+            })
         except:
             abort(422)
 
@@ -234,37 +240,44 @@ def create_app(test_config=None):
 
     @app.route('/quizzes', methods=['POST'])
     def play_quiz():
-      body = request.get_json()
-      if not body:
-          abort(400, {'message': 'request not found'})
-      previous_questions = body.get('previous_questions', None)
-      current_category = body.get('quiz_category', None)
+        body = request.get_json()
+        if not body:
+            abort(400, {'message': 'request not found'})
+        previous_questions = body.get('previous_questions', None)
+        current_category = body.get('quiz_category', None)
+        if current_category['type'] == 'click':
+            current_category = None
 
-      if not previous_questions:
-        if current_category:
-          questions_raw = (Question.query
-                           .filter(Question.category == current_category['id'])
-                           .all())
+        if not previous_questions:
+            if current_category:
+                questions_raw = Question.query.filter(Question.category == str(int(current_category['id'])+1)).all()
+            else:
+                questions_raw = Question.query.all()
         else:
-          questions_raw = (Question.query.all())
-      else:
-        if current_category:
-          questions_raw = (Question.query
-                           .filter(Question.category == current_category['id'])
-                           .filter(Question.id.notin_(previous_questions))
-                           .all())
+            if current_category:
+                questions_raw = Question.query.filter(Question.category == str(int(current_category['id'])+1)) \
+                    .filter(Question.id.notin_(previous_questions)) \
+                    .all()
+            else:
+                questions_raw = Question.query \
+                    .filter(Question.id.notin_(previous_questions)) \
+                    .all()
+
+        questions_formatted = [question.format() for question in questions_raw]
+
+        if len(questions_formatted) == 1:
+            random_question = questions_formatted[0]
+        elif len(questions_formatted) == 0:
+            abort(404, {'message': 'no more questions in current categories'})
         else:
-          questions_raw = (Question.query
-                           .filter(Question.id.notin_(previous_questions))
-                           .all())
+            random_question = questions_formatted[random.randint(0, len(questions_formatted)-1)]
 
-      questions_formatted = [question.format() for question in questions_raw]
-      random_question = questions_formatted[random.randint(0, len(questions_formatted)-1)]
 
-      return jsonify({
-        'success': True,
-        'question': random_question
-      })
+
+        return jsonify({
+            'success': True,
+            'question': random_question
+        })
 
     '''
   @TODO: 
@@ -295,7 +308,6 @@ def create_app(test_config=None):
             "error": 405,
             "message": "method not allowed"
         }), 405
-
 
     @app.errorhandler(422)
     def unprocessable(error):
