@@ -2,10 +2,11 @@ import os
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 import json
+from settings import DB_NAME, DB
 
-database_filename = "database.db"
+#database_filename = "database.db"
 project_dir = os.path.dirname(os.path.abspath(__file__))
-database_path = "sqlite:///{}".format(os.path.join(project_dir, database_filename))
+database_path = "{}:///{}".format(os.path.join(DB, DB_NAME))
 
 db = SQLAlchemy()
 

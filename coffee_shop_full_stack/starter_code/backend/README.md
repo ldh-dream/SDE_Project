@@ -85,3 +85,6 @@ There are `@TODO` comments throughout the `./backend/src`. We recommend tackling
 
 1. `./src/auth/auth.py`
 2. `./src/api.py`
+
+### .env
+Secrets are stored as environment variables. 
